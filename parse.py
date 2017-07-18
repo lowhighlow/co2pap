@@ -19,21 +19,20 @@ def get(dataframes, n):
 
 def dropNan(raw):
     
-    k = 0
+    edit = raw;
     bitmask = np.isnan(raw.ttl_pwr)
+    k = np.argmax(bitmask) + np.count_nonzero(bitmask)
+    if k != bitmask.size:
+        n = k
+        bitmask[n] = True;
+
     
-    nans = np.extract(bitmask == True, bitmask)
-    while True:
-        if (k < len(nans)):
-            
-            if bitmask[k + 1] == False:
-                raw.drop(k)
-            
-            #print(k)
-            k += 1
-        else:
-            break
-    return raw[pd.notnull(raw.ttl_pwr)]
+    edit = edit[np.invert(bitmask)]
+
+    bitmask2 = np.isnan(edit.ttl_pwr)
+    if np.argmax(bitmask2) != 0 and np.argmax(bitmask2) != 1:
+        print(np.argmax(bitmask2))
+    return edit
     
         
 
@@ -53,7 +52,8 @@ if __name__ == '__main__':
             l += 1
         except FileNotFoundError:
             break
-    print(len(dataframes[4]))
+    print(len(get(dataframes, 4)))
+    print(get(dataframes, 4).ttl_pwr.get(385))
 
     
 
