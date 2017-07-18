@@ -14,38 +14,46 @@ def toStr(n):
     else:
         return str(n)
 
-def get(n):
-    return df[n - 4]
+def get(dataframes, n):
+    return dataframes[n - 4]
 
-def dropNan(c):
-    c = c['Time']
+def dropNan(raw):
+    
     k = 0
+    bitmask = np.isnan(raw.ttl_pwr)
+    
+    nans = np.extract(bitmask == True, bitmask)
     while True:
-        try:
-            if math.isnan(c[k]):
-                c.drop(k)
-                c.drop(k)
-            else:
-                k += 1
-        except KeyError:
+        if (k < len(nans)):
+            
+            if bitmask[k + 1] == False:
+                raw.drop(k)
+            
+            #print(k)
+            k += 1
+        else:
             break
+    raw = raw[pd.notnull(raw.ttl_pwr)]
     
         
 
 #main code
-csv = pd.read_csv('/home/gustav/PowerConsumptionData/n004', sep='\s*,\s*', header=0, encoding='ascii', engine='python')
-df = [pd.DataFrame(csv)]
-l = 5
-while True:
-    try:
-        currentDF = pd.DataFrame(pd.read_csv('/home/gustav/PowerConsumptionData/n' + toStr(l), sep='\s*,\s*', header=0, encoding='ascii', engine='python'))
-        dropNan(currentDF)
-        df.append(currentDF)
-        print('Loaded n' + toStr(l))
-        l += 1
-    except FileNotFoundError:
-        break
+if __name__ == '__main__':
+    csv = pd.read_csv('/home/gustav/PowerConsumptionData/n004', sep='\s*,\s*', header=0, encoding='ascii', engine='python')
+    dataframes = [pd.DataFrame(csv)]
+    print('Loaded n004')
+    dropNan(dataframes[0])
+    l = 5
+    while True:
+        try:
+            currentDF = pd.DataFrame(pd.read_csv('/home/gustav/PowerConsumptionData/n' + toStr(l), sep='\s*,\s*', header=0, encoding='ascii', engine='python'))
+            dropNan(currentDF)
+            dataframes.append(currentDF)
+            print('Loaded n' + toStr(l))
+            l += 1
+        except FileNotFoundError:
+            break
 
-print(get(4)[1492020000])
+    
 
 
