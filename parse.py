@@ -36,8 +36,14 @@ def dropNan(raw):
     
     edit = edit[np.invert(bitmask)]
     return edit
+
+
+
+
+def findTime(df, time1, time2):
+    return df[(df['Time'] >= time1) & (df['Time'] <= time2)]
+
     
-        
 
 #main code
 if __name__ == '__main__':
@@ -56,7 +62,8 @@ if __name__ == '__main__':
         except FileNotFoundError:
             break
     print(len(get(dataframes, 4)))
-    print(get(dataframes, 4).ttl_pwr.get(408))
+    print(findTime(get(dataframes, 4), 1483228800, 1483293600))
+    
 
     
 
