@@ -31,7 +31,7 @@ def dropNan(raw):
 
     bitmask2 = np.isnan(edit.ttl_pwr)
     if np.argmax(bitmask2) != 0 and np.argmax(bitmask2) != 1:
-        print(np.argmax(bitmask2))
+        edit = dropNan(edit)
     return edit
     
         
