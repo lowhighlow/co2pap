@@ -24,9 +24,9 @@ def dropNan(c):
         try:
             if math.isnan(c[k]):
                 c.drop(k)
-                if math.isnan(c[k]) == false:
-                    c.drop(k)
-            k += 1
+                c.drop(k)
+            else:
+                k += 1
         except KeyError:
             break
     
@@ -45,5 +45,7 @@ while True:
         l += 1
     except FileNotFoundError:
         break
+
+print(get(4)[1492020000])
 
 
