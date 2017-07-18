@@ -30,8 +30,13 @@ def dropNan(raw):
     edit = edit[np.invert(bitmask)]
 
     bitmask2 = np.isnan(edit.ttl_pwr)
+    
     if np.argmax(bitmask2) != 0 and np.argmax(bitmask2) != 1:
-        edit = dropNan(edit)
+        try:
+            edit = dropNan(edit)
+        except RecursionError:
+            return edit
+            
     return edit
     
         
