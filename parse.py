@@ -33,7 +33,7 @@ def dropNan(raw):
             k += 1
         else:
             break
-    raw = raw[pd.notnull(raw.ttl_pwr)]
+    return raw[pd.notnull(raw.ttl_pwr)]
     
         
 
@@ -42,17 +42,18 @@ if __name__ == '__main__':
     csv = pd.read_csv('/home/gustav/PowerConsumptionData/n004', sep='\s*,\s*', header=0, encoding='ascii', engine='python')
     dataframes = [pd.DataFrame(csv)]
     print('Loaded n004')
-    dropNan(dataframes[0])
+    dataframes[0] = dropNan(dataframes[0])
     l = 5
     while True:
         try:
             currentDF = pd.DataFrame(pd.read_csv('/home/gustav/PowerConsumptionData/n' + toStr(l), sep='\s*,\s*', header=0, encoding='ascii', engine='python'))
-            dropNan(currentDF)
+            currentDF = dropNan(currentDF)
             dataframes.append(currentDF)
             print('Loaded n' + toStr(l))
             l += 1
         except FileNotFoundError:
             break
+    print(len(dataframes[4]))
 
     
 
