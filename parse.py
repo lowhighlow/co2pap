@@ -81,6 +81,14 @@ def calculatePowerConsumption(node, start, end):
     
     return power / 3600
 
+def calculateTotalPowerConsumption(dataframes, nodeframe):
+    totalpower = 0
+    n = 0
+    while n < nodeframe.node.size:
+        totalpower += calculatePowerConsumption(get(dataframes, nodeframe.node.iloc[n]), nodeframe.time1.iloc[n], nodeframe.time2.iloc[n])
+        n += 1
+    return totalpower
+
     
 
 #main code
@@ -100,9 +108,9 @@ if __name__ == '__main__':
         except FileNotFoundError:
             break
     print('Loading finished')
-    print(str(calculatePowerConsumption(get(dataframes, 4), 1483531200, 1483617600).ttl_pwr) + ' Wh')
-    
 
-    
-
-
+    #Testing Area
+    csv = pd.read_csv('nodeframe', sep='\s*,\s*', header=0, encoding='ascii', engine='python')
+    nodeframe = pd.DataFrame(csv)
+    print(nodeframe)
+    print(str(calculateTotalPowerConsumption(dataframes, nodeframe).ttl_pwr) + ' Wh')
