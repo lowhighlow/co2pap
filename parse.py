@@ -3,6 +3,8 @@ import numpy as np
 import math
 import pandas as pd
 import matplotlib.pyplot as plt
+import time as time
+
 
 #Vals
 interval = 21600
@@ -95,6 +97,28 @@ def powerToCO2(n):
 def powerToMoney(n):
     return n * 0.2
 
+def totalConsumption():
+    csv = pd.read_csv('nodeframe', sep='\s*,\s*', header=0, encoding='ascii', engine='python')
+    nodeframe = pd.DataFrame(csv)
+    power = calculateTotalPowerConsumption(dataframes, nodeframe).ttl_pwr / 1000
+    
+    print('Es wurden ungefähr im letzten halben Jahr für node 4:')
+    print(str(int(power)) + ' kWh Strom verbraucht')
+    print(str(int(powerToCO2(power))) + ' kG CO² ausgestoßen')
+    print(str(int(powerToMoney(power))) + ' € Ausgegeben')
+
+
+def saveToChart(dataframes, nodeframe, power):
+    powersum = findTime(get(dataframes, nodeframe.node.iloc[0]), nodeframe.time1.iloc[0], nodeframe.time2.iloc[0]).ttl_pwr
+    n = 1
+    while n < len(nodeframe.node):
+        powersum += findTime(get(dataframes, nodeframe.node.iloc[n]), nodeframe.time1.iloc[n], nodeframe.time2.iloc[n]).ttl_pwr
+        n+=1
+        
+    plt.plot(findTime(get(dataframes, 63), t1, t2), powersum)
+    plt.axis([t1,t2, powersum[powersum.argmin()], powersum[powersum.argmax()]])
+    plt.savefig('calc.png')
+
 #main code
 if __name__ == '__main__':
     csv = pd.read_csv('/home/gustav/PowerConsumptionData/n004', sep='\s*,\s*', header=0, encoding='ascii', engine='python')
@@ -114,10 +138,20 @@ if __name__ == '__main__':
     print('Loading finished')
 
     #Testing Area
-    csv = pd.read_csv('nodeframe', sep='\s*,\s*', header=0, encoding='ascii', engine='python')
-    nodeframe = pd.DataFrame(csv)
+    t1 = (2017, 2, 25, 14, 0, 2, 0, 0, 0)
+    t1 = time.mktime(t1)
+    t2 = (2017, 2, 27, 14, 0, 31, 0, 0, 0)
+    t2 = time.mktime(t2)
+
+    nodeframe = nodeframe = pd.DataFrame({'node': [63, 35, 16, 39, 17, 41, 56, 25],
+                                  'time1': [t1, t1, t1, t1, t1, t1, t1, t1],
+                                  'time2': [t2, t2, t2, t2, t2, t2, t2, t2]},
+                                index=[0, 1, 2, 3, 4, 5, 6, 7])
     power = calculateTotalPowerConsumption(dataframes, nodeframe).ttl_pwr / 1000
-    print('Es wurden ungefähr im letzten halben Jahr für node 4:')
+    saveToChart(dataframes, nodeframe, power)
+    
+    print('Es wurden ungefähr :')
     print(str(int(power)) + ' kWh Strom verbraucht')
     print(str(int(powerToCO2(power))) + ' kG CO² ausgestoßen')
     print(str(int(powerToMoney(power))) + ' € Ausgegeben')
+
