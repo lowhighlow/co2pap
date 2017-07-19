@@ -51,7 +51,7 @@ def findTime(df, time1, time2):
     if timetable.tail(1).Time.iloc[0] < time2:
         timetable = timetable.append(df[(df['Time'] >= time2) & (df['Time'] <= time2 + interval)])
     
-    if timetable.Time.loc[0] > time1:
+    if timetable.Time.iloc[0] > time1:
         timetable2 = df[(df['Time'] <= time1) & (df['Time'] >= time1 + interval)]
         timetable = timetable2.append(timetable)
         
@@ -61,18 +61,20 @@ def findTime(df, time1, time2):
 def calculatePowerConsumption(node, start, end):
     timetable = findTime(node, start, end)
     power = 0
-    if timetable.Time.iloc[0] < start:
-        power += timetable.Time.iloc[0] / start * interval * timetable.ttl_pwr.iloc[0]
+   
+    if timetable.Time.iloc[0] > start:
+        
+        power += (timetable.Time.iloc[0] - start) * timetable.ttl_pwr.iloc[0]
     else:
         power += interval * timetable.ttl_pwr.iloc[0]
 
     n = 1
     while n < timetable.Time.size -1:
-        power += interval * timetable.ttl_pwr.loc[n]
+        power += interval * timetable.ttl_pwr.iloc[n]
         n += 1
     
-    if timetable.tail(1).Time.iloc[0] < end:
-        power += end / timetable.tail(1).Time.iloc[0] * interval * timetable.tail(1).iloc[0]
+    if timetable.tail(1).Time.iloc[0] > end:
+        power += (timetable.tail(1).Time.iloc[0] - end) * timetable.tail(1).iloc[0]
     else:
         power += interval * timetable.tail(1).iloc[0]
         
@@ -98,7 +100,7 @@ if __name__ == '__main__':
         except FileNotFoundError:
             break
     print('Loading finished')
-    print(str(calculatePowerConsumption(get(dataframes, 4), 1483227800, 1483293500).ttl_pwr) + ' Wh')
+    print(str(calculatePowerConsumption(get(dataframes, 4), 1483531200, 1483617600).ttl_pwr) + ' Wh')
     
 
     
