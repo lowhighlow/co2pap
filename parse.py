@@ -60,8 +60,24 @@ def findTime(df, time1, time2):
 
 def calculatePowerConsumption(node, start, end):
     timetable = findTime(node, start, end)
+    power = 0
+    if timetable.Time.iloc[0] < start:
+        power += timetable.Time.iloc[0] / start * interval * timetable.ttl_pwr.iloc[0]
+    else:
+        power += interval * timetable.ttl_pwr.iloc[0]
+
+    n = 1
+    while n < timetable.Time.size -1:
+        power += interval * timetable.ttl_pwr.loc[n]
+        n += 1
     
+    if timetable.tail(1).Time.iloc[0] < end:
+        power += end / timetable.tail(1).Time.iloc[0] * interval * timetable.tail(1).iloc[0]
+    else:
+        power += interval * timetable.tail(1).iloc[0]
+        
     
+    return power / 3600
 
     
 
@@ -69,7 +85,7 @@ def calculatePowerConsumption(node, start, end):
 if __name__ == '__main__':
     csv = pd.read_csv('/home/gustav/PowerConsumptionData/n004', sep='\s*,\s*', header=0, encoding='ascii', engine='python')
     dataframes = [pd.DataFrame(csv)]
-    print('Loaded n004')
+    print('Loading started')
     dataframes[0] = dropNan(dataframes[0])
     l = 5
     while True:
@@ -77,12 +93,12 @@ if __name__ == '__main__':
             currentDF = pd.DataFrame(pd.read_csv('/home/gustav/PowerConsumptionData/n' + toStr(l), sep='\s*,\s*', header=0, encoding='ascii', engine='python'))
             currentDF = dropNan(currentDF)
             dataframes.append(currentDF)
-            print('Loaded n' + toStr(l))
+            
             l += 1
         except FileNotFoundError:
             break
-    print(len(get(dataframes, 4)))
-    print(findTime(get(dataframes, 4), 1483227800, 1483293500))
+    print('Loading finished')
+    print(str(calculatePowerConsumption(get(dataframes, 4), 1483227800, 1483293500).ttl_pwr) + ' Wh')
     
 
     
