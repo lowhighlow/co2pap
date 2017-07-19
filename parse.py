@@ -52,8 +52,9 @@ def findTime(df, time1, time2):
         timetable = timetable.append(df[(df['Time'] >= time2) & (df['Time'] <= time2 + interval)])
     
     if timetable.Time.loc[0] > time1:
-        timetable.loc[-1] = df[(df['Time'] <= time1) & (df['Time'] >= time1 + interval)]
-        timetable.index += 1
+        timetable2 = df[(df['Time'] <= time1) & (df['Time'] >= time1 + interval)]
+        timetable = timetable2.append(timetable)
+        
     return timetable
     
 
@@ -81,7 +82,7 @@ if __name__ == '__main__':
         except FileNotFoundError:
             break
     print(len(get(dataframes, 4)))
-    print(findTime(get(dataframes, 4), 1483228800, 1483293500))
+    print(findTime(get(dataframes, 4), 1483227800, 1483293500))
     
 
     
