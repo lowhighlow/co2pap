@@ -4,6 +4,9 @@ import math
 import pandas as pd
 import matplotlib.pyplot as plt
 
+#Vals
+interval = 21600
+
 #functions
 def toStr(n):
 
@@ -41,7 +44,23 @@ def dropNan(raw):
 
 
 def findTime(df, time1, time2):
-    return df[(df['Time'] >= time1) & (df['Time'] <= time2)]
+    
+    timetable = df[(df['Time'] >= time1) & (df['Time'] <= time2)]
+
+    
+    if timetable.tail(1).Time.iloc[0] < time2:
+        timetable = timetable.append(df[(df['Time'] >= time2) & (df['Time'] <= time2 + interval)])
+    
+    if timetable.Time.loc[0] > time1:
+        timetable.loc[-1] = df[(df['Time'] <= time1) & (df['Time'] >= time1 + interval)]
+        timetable.index += 1
+    return timetable
+    
+
+def calculatePowerConsumption(node, start, end):
+    timetable = findTime(node, start, end)
+    
+    
 
     
 
@@ -62,7 +81,7 @@ if __name__ == '__main__':
         except FileNotFoundError:
             break
     print(len(get(dataframes, 4)))
-    print(findTime(get(dataframes, 4), 1483228800, 1483293600))
+    print(findTime(get(dataframes, 4), 1483228800, 1483293500))
     
 
     
