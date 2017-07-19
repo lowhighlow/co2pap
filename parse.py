@@ -89,7 +89,11 @@ def calculateTotalPowerConsumption(dataframes, nodeframe):
         n += 1
     return totalpower
 
-    
+def powerToCO2(n):
+    return n * 0.197
+
+def powerToMoney(n):
+    return n * 0.2
 
 #main code
 if __name__ == '__main__':
@@ -112,5 +116,8 @@ if __name__ == '__main__':
     #Testing Area
     csv = pd.read_csv('nodeframe', sep='\s*,\s*', header=0, encoding='ascii', engine='python')
     nodeframe = pd.DataFrame(csv)
-    print(nodeframe)
-    print(str(calculateTotalPowerConsumption(dataframes, nodeframe).ttl_pwr) + ' Wh')
+    power = calculateTotalPowerConsumption(dataframes, nodeframe).ttl_pwr / 1000
+    print('Es wurden ungefähr im letzten halben Jahr für node 4:')
+    print(str(int(power)) + ' kWh Strom verbraucht')
+    print(str(int(powerToCO2(power))) + ' kG CO² ausgestoßen')
+    print(str(int(powerToMoney(power))) + ' € Ausgegeben')
