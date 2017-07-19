@@ -1,0 +1,152 @@
+================== Job mgmt.8308529 ==================
+             Job Id: mgmt.8308529
+           Job Name: borg1024-8308529
+  Structure Version: 210
+              Owner: di73yom
+         Unix Group: pr94fa
+    Submitting Host: login
+  Submitting Userid: 3450486
+ Submitting Groupid: 3449460
+    Number of Steps: 1
+------------------ Step mgmt.8308529.0 ------------------
+        Job Step Id: mgmt.8308529.0
+          Step Name: 0
+         Queue Date: Sa 25 Feb 2017 10:28:12 CET
+ Job Accounting Key: 6390975297101003906
+         Dependency: 
+             Status: Removed
+   Eligibility Time: Sa 25 Feb 2017 10:28:12 CET
+      Dispatch Time: Sa 25 Feb 2017 14:00:02 CET
+         Start Time: Sa 25 Feb 2017 14:00:02 CET
+    Completion Date: Mo 27 Feb 2017 14:00:31 CET
+    Completion Code: 15
+        Start Count: 1
+      User Priority: 50
+       user_sysprio: 0
+      class_sysprio: 100
+      group_sysprio: 0
+      Notifications: Error
+ Virtual Image Size: 2 kb
+     Checkpointable: no
+Good Ckpt Time/Date: 
+    Ckpt Accum Time: 0
+    MetaCluster Job: no
+    Checkpoint File: 
+  Restart From Ckpt: no
+ Restart Same Nodes: no
+            Restart: yes
+     Hold Job Until: 
+               RSet: RSET_NONE
+Mcm Affinity Options:   
+      Task Affinity: 
+    Cpus Per Core: 0
+ Parallel Threads: 0
+                Cmd: /gpfs/scratch/pr94fa/di73yom/panphasia_run_pm_1024/job_run_borg.sh
+               Args: 
+                Env: ; 
+                 In: /dev/null
+                Out: /gpfs/scratch/pr94fa/di73yom/logs/borg1024-8308529.out
+                Err: /gpfs/scratch/pr94fa/di73yom/logs/borg1024-8308529.err
+Initial Working Dir: /gpfs/scratch/pr94fa/di73yom/panphasia_run_pm_1024
+       Requirements: 
+        Preferences: 
+          Step Type: MPICH Parallel
+     Min Processors: 32
+     Max Processors: 32
+  Alloc. Host Count: 8
+     Allocated Host: n063 (SMT_ON)
+                     n035 (SMT_ON)
+                     n016 (SMT_ON)
+                     n039 (SMT_ON)
+                     n017 (SMT_ON)
+                     n041 (SMT_ON)
+                     n056 (SMT_ON)
+                     n025 (SMT_ON)
+         Node Usage: not_shared
+     Reservation ID:  
+   Flexible Res. ID:  
+        Notify User: lavaux@iap.fr
+              Shell: /bin/bash
+  LoadLeveler Group: pr94fa
+              Class: parallel
+    Ckpt Hard Limit: undefined
+    Ckpt Soft Limit: undefined
+     Cpu Hard Limit: undefined
+     Cpu Soft Limit: undefined
+    Data Hard Limit: undefined
+    Data Soft Limit: undefined
+    As   Hard Limit: undefined
+    As   Soft Limit: undefined
+   Nproc Hard Limit: undefined
+   Nproc Soft Limit: undefined
+ Memlock Hard Limit: undefined
+ Memlock Soft Limit: undefined
+   Locks Hard Limit: undefined
+   Locks Soft Limit: undefined
+  Nofile Hard Limit: undefined
+  Nofile Soft Limit: undefined
+    Core Hard Limit: undefined
+    Core Soft Limit: undefined
+    File Hard Limit: undefined
+    File Soft Limit: undefined
+   Stack Hard Limit: undefined
+   Stack Soft Limit: undefined
+     Rss Hard Limit: undefined
+     Rss Soft Limit: undefined
+Step Cpu Hard Limit: undefined
+Step Cpu Soft Limit: undefined
+Wall Clk Hard Limit: 2+00:00:00 (172800 seconds)
+Wall Clk Soft Limit: 2+00:00:00 (172800 seconds)
+            Comment: 
+            Account: 
+   NQS Submit Queue: 
+   NQS Query Queues: 
+    Monitor Program: 
+  Monitor Prgm Args: 
+      Task_geometry: 
+          Resources: ConsumableCpus(8)
+     Node Resources: 
+     Step Resources: 
+           Blocking: UNLIMITED
+Adapter Requirement: 
+          Step Cpus: 256
+Step Virtual Memory: 0.000 mb
+   Step Real Memory: 0.000 mb
+         Large Page: N
+      Bulk Transfer: No
+Topology Requirement: none
+     Network Usages: 
+  Starter User Time: 00:00:00.288015
+Starter System Time: 00:00:00.540032
+ Starter Total Time: 00:00:00.828047
+     Starter maxrss: 529108
+      Starter ixrss: 0
+      Starter idrss: 0
+      Starter isrss: 0
+     Starter minflt: 19459
+     Starter majflt: 1
+      Starter nswap: 0
+    Starter inblock: 20056
+    Starter oublock: 2760
+     Starter msgsnd: 0
+     Starter msgrcv: 0
+   Starter nsignals: 0
+      Starter nvcsw: 24510
+     Starter nivcsw: 526
+     Step User Time: 47+11:40:34.887151
+   Step System Time: 2+19:53:06.025167
+    Step Total Time: 50+07:33:40.912318
+        Step maxrss: 7307616
+         Step ixrss: 0
+         Step idrss: 0
+         Step isrss: 0
+        Step minflt: 918388253
+        Step majflt: 38
+         Step nswap: 0
+       Step inblock: 30080
+       Step oublock: 320
+        Step msgsnd: 0
+        Step msgrcv: 0
+      Step nsignals: 0
+         Step nvcsw: 254123825
+        Step nivcsw: 403461869
