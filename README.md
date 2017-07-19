@@ -5,6 +5,7 @@ nodeframe in the same folder as the script.
 The format for the n... file needs to be like this:
 
  Time, ttl_pwr, cpu_pwr, mem_pwr, cpu_load, mem_load
+ <without this line of course>
  1483228800, 1.7306365741e+02, 1.1758435185e+02, 3.7052962963e+01, 8.8779824074e+00, 2.9319143241e+04
  1483250400, 1.7047314815e+02, 1.1539787037e+02, 3.6647314815e+01, 8.4709282407e+00, 2.9207021620e+04
  
