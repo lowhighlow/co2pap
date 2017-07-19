@@ -12,6 +12,7 @@ The format for the n... file needs to be like this:
 And for the nodeframe:
 
  node, time1, time2
+ 
  4, 1483228800, 1498867200
  
 All Timerelated rows need to be in the Unix-Timestamp in order for it to work. The interval variable needs to be changed to the
