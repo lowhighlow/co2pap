@@ -107,6 +107,9 @@ def totalConsumption():
     print(str(int(powerToCO2(power))) + ' kG CO² ausgestoßen')
     print(str(int(powerToMoney(power))) + ' € Ausgegeben')
 
+def calculateInterval(dataframe):
+    return dataframe.Time.iloc[1] - dataframe.Time.iloc[0]
+
 
 def saveToChart(dataframes, nodeframe, power, name, t1, t2):
     powersum = findTime(get(dataframes, nodeframe.node.iloc[0]), nodeframe.time1.iloc[0], nodeframe.time2.iloc[0])
@@ -114,7 +117,7 @@ def saveToChart(dataframes, nodeframe, power, name, t1, t2):
     while n < len(nodeframe.node):
         powersum.ttl_pwr += findTime(get(dataframes, nodeframe.node.iloc[n]), nodeframe.time1.iloc[n], nodeframe.time2.iloc[n]).ttl_pwr
         n+=1
-    print(powersum.values)
+    
     plt.plot(powersum.Time.values, powersum.ttl_pwr.values)
     plt.axis([t1,t2, powersum.ttl_pwr[powersum.ttl_pwr.argmin()], powersum.ttl_pwr[powersum.ttl_pwr.argmax()]])
     plt.savefig(name + '.pdf')
@@ -124,6 +127,8 @@ if __name__ == '__main__':
     csv = pd.read_csv('/home/gustav/PowerConsumptionData/n004', sep='\s*,\s*', header=0, encoding='ascii', engine='python')
     dataframes = [pd.DataFrame(csv)]
     print('Loading started')
+    interval = calculateInterval(dataframes[0])
+    print(interval)
     dataframes[0] = dropNan(dataframes[0])
     l = 5
     while True:
@@ -144,8 +149,4 @@ if __name__ == '__main__':
     power = calculateTotalPowerConsumption(dataframes, nodeframe).ttl_pwr / 1000
     saveToChart(dataframes, nodeframe, power, "calc2", 1483228800, 1498867200)
     
-    print('Es wurden ungefähr :')
-    print(str(int(power)) + ' kWh Strom verbraucht')
-    print(str(int(powerToCO2(power))) + ' kG CO² ausgestoßen')
-    print(str(int(powerToMoney(power))) + ' € Ausgegeben')
 
