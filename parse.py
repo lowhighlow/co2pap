@@ -108,16 +108,16 @@ def totalConsumption():
     print(str(int(powerToMoney(power))) + ' € Ausgegeben')
 
 
-def saveToChart(dataframes, nodeframe, power):
-    powersum = findTime(get(dataframes, nodeframe.node.iloc[0]), nodeframe.time1.iloc[0], nodeframe.time2.iloc[0]).ttl_pwr
+def saveToChart(dataframes, nodeframe, power, name, t1, t2):
+    powersum = findTime(get(dataframes, nodeframe.node.iloc[0]), nodeframe.time1.iloc[0], nodeframe.time2.iloc[0])
     n = 1
     while n < len(nodeframe.node):
-        powersum += findTime(get(dataframes, nodeframe.node.iloc[n]), nodeframe.time1.iloc[n], nodeframe.time2.iloc[n]).ttl_pwr
+        powersum.ttl_pwr += findTime(get(dataframes, nodeframe.node.iloc[n]), nodeframe.time1.iloc[n], nodeframe.time2.iloc[n]).ttl_pwr
         n+=1
-        
-    plt.plot(findTime(get(dataframes, 63), t1, t2), powersum)
-    plt.axis([t1,t2, powersum[powersum.argmin()], powersum[powersum.argmax()]])
-    plt.savefig('calc.png')
+    print(powersum.values)
+    plt.plot(powersum.Time.values, powersum.ttl_pwr.values)
+    plt.axis([t1,t2, powersum.ttl_pwr[powersum.ttl_pwr.argmin()], powersum.ttl_pwr[powersum.ttl_pwr.argmax()]])
+    plt.savefig(name + '.pdf')
 
 #main code
 if __name__ == '__main__':
@@ -138,17 +138,11 @@ if __name__ == '__main__':
     print('Loading finished')
 
     #Testing Area
-    t1 = (2017, 2, 25, 14, 0, 2, 0, 0, 0)
-    t1 = time.mktime(t1)
-    t2 = (2017, 2, 27, 14, 0, 31, 0, 0, 0)
-    t2 = time.mktime(t2)
-
-    nodeframe = nodeframe = pd.DataFrame({'node': [63, 35, 16, 39, 17, 41, 56, 25],
-                                  'time1': [t1, t1, t1, t1, t1, t1, t1, t1],
-                                  'time2': [t2, t2, t2, t2, t2, t2, t2, t2]},
-                                index=[0, 1, 2, 3, 4, 5, 6, 7])
+    csv = pd.read_csv('nodeframe', sep='\s*,\s*', header=0, encoding='ascii', engine='python')
+    nodeframe = pd.DataFrame(csv)
+    
     power = calculateTotalPowerConsumption(dataframes, nodeframe).ttl_pwr / 1000
-    saveToChart(dataframes, nodeframe, power)
+    saveToChart(dataframes, nodeframe, power, "calc2", 1483228800, 1498867200)
     
     print('Es wurden ungefähr :')
     print(str(int(power)) + ' kWh Strom verbraucht')
