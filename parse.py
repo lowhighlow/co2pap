@@ -147,7 +147,16 @@ def saveToChart(dataframes, nodeframe, power, name, t1, t2):
 if __name__ == '__main__':
     with fileinput.FileInput('n004', inplace=True, backup='.bak') as file:
         for line in file:
-            print(line.replace(',', '.'), end='')
+            print(line.replace(',1', '.'), end='')
+            print(line.replace(',2', '.'), end='')
+            print(line.replace(',3', '.'), end='')
+            print(line.replace(',4', '.'), end='')
+            print(line.replace(',5', '.'), end='')
+            print(line.replace(',6', '.'), end='')
+            print(line.replace(',7', '.'), end='')
+            print(line.replace(',8', '.'), end='')
+            print(line.replace(',9', '.'), end='')
+            print(line.replace(',0', '.'), end='')
 
    
      
@@ -162,11 +171,10 @@ if __name__ == '__main__':
     l = 5
     while True:
         try:
-            
-            
                     
             currentDF = pd.DataFrame(pd.read_csv('n' + toStr(l), sep='\s*,\s*', header=0, encoding='ascii', engine='python'))
             print(l)
+            
             currentDF = dropNan(currentDF)
             dataframes.append(currentDF)
             
