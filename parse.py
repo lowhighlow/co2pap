@@ -10,8 +10,8 @@ import os
 
 #Vals
 interval = 60
-global start = str(-3600*48)
-global start = '-100'
+start = str(-3600*48)
+start = '-100'
 
 #functions
 def toStr(n):
@@ -251,7 +251,7 @@ def saveToChart(dataframes, nodeframe, power, name, t1, t2):
 #main code
 if __name__ == '__main__':
     os.system('python extrct_mntrng_infrmtn.py')
-    time.sleep(60)
+    time.sleep(60s)
     
     csv = pd.read_csv('n004', sep='\s*,\s*', header=0, encoding='ascii', engine='python')
     
