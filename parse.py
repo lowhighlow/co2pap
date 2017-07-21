@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import time as time
 from matplotlib.backends.backend_pdf import PdfPages
 import matplotlib.patches as mpatches
-import fileinput
+import random
 
 #Vals
 interval = 60
@@ -54,8 +54,8 @@ def findTime(df, time1, time2):
     timetable = df[(df['Time'] >= time1) & (df['Time'] <= time2)]
 
     print (df['Time'])
-    #if timetable.tail(1).Time.iloc[0] < time2:
-     #   timetable = timetable.append(df[(df['Time'] >= time2) & (df['Time'] <= time2 + interval)])
+    if timetable.tail(1).Time.iloc[0] < time2:
+        timetable = timetable.append(df[(df['Time'] >= time2) & (df['Time'] <= time2 + interval)])
     
     if timetable.Time.iloc[0] > time1:
         timetable2 = df[(df['Time'] <= time1) & (df['Time'] >= time1 + interval)]
@@ -116,6 +116,13 @@ def calculateInterval(dataframe):
 
 def saveToChart(dataframes, nodeframe, power, name, t1, t2):
     with PdfPages('Chart.pdf') as pdf:
+
+
+        n = 1
+        colors = [(0, 0, 255)]
+        while n < len(nodeframe.node):
+            colors[n] = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
+        
         n = 0
         plt.axis([t1,t2, 0, 300])
         plt.title('Total Consumption')
@@ -173,11 +180,7 @@ def saveToChart(dataframes, nodeframe, power, name, t1, t2):
         plt.xlabel('Seconds since Epoch')
         pdf.savefig()
         plt.close()
-
-        
-    
-    
-    
+            
     
     
 
