@@ -252,8 +252,10 @@ def saveToChart(dataframes, nodeframe, power, name, t1, t2):
 if __name__ == '__main__':
     f = open('interactionfile', 'w')
     f.write(str(start) + '\n' + str(end))
-    os.system('python extrct_mntrng_infrmtn.py')
-    time.sleep(60)
+    f.close()
+    time.sleep(5)
+    os.system('python2 extrct_mntrng_infrmtn.py')
+    time.sleep(20)
     
     csv = pd.read_csv('n004', sep='\s*,\s*', header=0, encoding='ascii', engine='python')
     

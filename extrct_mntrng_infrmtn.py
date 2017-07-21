@@ -5,8 +5,6 @@ from subprocess import Popen,PIPE,call
 import sys,os,glob,getopt,pickle,re,commands
 import string
 import csv
-from parse import start
-from parse import end
 
 f=open('interactionfile', 'r')
 
