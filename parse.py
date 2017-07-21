@@ -4,6 +4,8 @@ import math
 import pandas as pd
 import matplotlib.pyplot as plt
 import time as time
+from matplotlib.backends.backend_pdf import PdfPages
+import matplotlib.patches as mpatches
 
 
 #Vals
@@ -97,30 +99,47 @@ def powerToCO2(n):
 def powerToMoney(n):
     return n * 0.2
 
-def totalConsumption():
-    csv = pd.read_csv('nodeframe', sep='\s*,\s*', header=0, encoding='ascii', engine='python')
-    nodeframe = pd.DataFrame(csv)
+def totalConsumption(nodeframe):
+    
     power = calculateTotalPowerConsumption(dataframes, nodeframe).ttl_pwr / 1000
     
-    print('Es wurden ungefähr im letzten halben Jahr für node 4:')
-    print(str(int(power)) + ' kWh Strom verbraucht')
-    print(str(int(powerToCO2(power))) + ' kG CO² ausgestoßen')
-    print(str(int(powerToMoney(power))) + ' € Ausgegeben')
+    print('It were:')
+    print(str(int(power)) + ' kWh energy used.')
+    print(str(int(powerToCO2(power))) + ' kG CO² emitted.')
+    print(str(int(powerToMoney(power))) + ' € spent.')
+
+def calculateInterval(dataframe):
+    return dataframe.Time.iloc[1] - dataframe.Time.iloc[0]
 
 def calculateInterval(dataframe):
     return dataframe.Time.iloc[1] - dataframe.Time.iloc[0]
 
 
 def saveToChart(dataframes, nodeframe, power, name, t1, t2):
-    powersum = findTime(get(dataframes, nodeframe.node.iloc[0]), nodeframe.time1.iloc[0], nodeframe.time2.iloc[0])
-    n = 1
-    while n < len(nodeframe.node):
-        powersum.ttl_pwr += findTime(get(dataframes, nodeframe.node.iloc[n]), nodeframe.time1.iloc[n], nodeframe.time2.iloc[n]).ttl_pwr
-        n+=1
-    
-    plt.plot(powersum.Time.values, powersum.ttl_pwr.values)
-    plt.axis([t1,t2, powersum.ttl_pwr[powersum.ttl_pwr.argmin()], powersum.ttl_pwr[powersum.ttl_pwr.argmax()]])
-    plt.savefig(name + '.pdf')
+
+    with PdfPages('Chart.pdf') as pdf:
+        n = 0
+        plt.axis([t1,t2, 0, 300])
+        plt.title('Total Consumption')
+        while n < len(nodeframe.node):
+        
+            plt.plot(dataframes[nodeframe.node.iloc[n]].Time.values, dataframes[nodeframe.node.iloc[n]].ttl_pwr.values)
+            n+=1
+        pdf.savefig()
+        plt.close()
+
+        n = 0
+        plt.axis([t1,t2, 0, 250])
+        plt.title('Total Consumption')
+        while n < len(nodeframe.node):
+            
+            plt.plot(dataframes[nodeframe.node.iloc[n]].Time.values, dataframes[nodeframe.node.iloc[n]].cpu_pwr.values)
+            n+=1
+        pdf.savefig()
+        plt.close()
+
+        
+
 
 #main code
 if __name__ == '__main__':
@@ -148,5 +167,6 @@ if __name__ == '__main__':
     
     power = calculateTotalPowerConsumption(dataframes, nodeframe).ttl_pwr / 1000
     saveToChart(dataframes, nodeframe, power, "calc2", 1483228800, 1498867200)
+    totalConsumption(nodeframe)
     
 
