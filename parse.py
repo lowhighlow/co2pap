@@ -9,7 +9,7 @@ import matplotlib.patches as mpatches
 import fileinput
 
 #Vals
-interval = 21600
+interval = 60
 
 #functions
 def toStr(n):
@@ -145,18 +145,20 @@ def saveToChart(dataframes, nodeframe, power, name, t1, t2):
 
 #main code
 if __name__ == '__main__':
-    with fileinput.FileInput('n004', inplace=True, backup='.bak') as file:
+    with fileinput.FileInput('n004', inplace=True) as file:
+        
         for line in file:
-            print(line.replace(',1', '.'), end='')
-            print(line.replace(',2', '.'), end='')
-            print(line.replace(',3', '.'), end='')
-            print(line.replace(',4', '.'), end='')
-            print(line.replace(',5', '.'), end='')
-            print(line.replace(',6', '.'), end='')
-            print(line.replace(',7', '.'), end='')
-            print(line.replace(',8', '.'), end='')
-            print(line.replace(',9', '.'), end='')
-            print(line.replace(',0', '.'), end='')
+            
+            print(line.replace(',1', '.'))
+            print(line.replace(',2', '.'))
+            print(line.replace(',3', '.'))
+            print(line.replace(',4', '.'))
+            print(line.replace(',5', '.'))
+            print(line.replace(',6', '.'))
+            print(line.replace(',7', '.'))
+            print(line.replace(',8', '.'))
+            print(line.replace(',9', '.'))
+            print(line.replace(',0', '.'))
 
    
      
@@ -165,7 +167,7 @@ if __name__ == '__main__':
     
     dataframes = [pd.DataFrame(csv)]
     print('Loading started')
-    interval = calculateInterval(dataframes[0])
+    #interval = calculateInterval(dataframes[0])
     print(interval)
     dataframes[0] = dropNan(dataframes[0])
     l = 5
