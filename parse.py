@@ -9,12 +9,17 @@ import matplotlib.patches as mpatches
 import os
 
 #Vals
+
+#interval is the diffrence between two sequential timestamps
 interval = 60
+#times for passing to extrct_....
 start = str(-3600*48)
 end = '-100'
-job='mgmt.8719963.0'
+
 
 #functions
+
+#converts n to a string in the format 004 / 044 / 444
 def toStr(n):
 
     if (n < 10):
@@ -24,9 +29,12 @@ def toStr(n):
     else:
         return str(n)
 
+
+#returns the dataframe out of an list corresponding to the node n
 def get(dataframes, n):
     return dataframes[n - 4]
 
+#drops nans for a passed dataframe
 def dropNan(raw):
     
     edit = raw;
@@ -49,7 +57,7 @@ def dropNan(raw):
 
 
 
-
+#returns a part from a dataframe wich timestamp is between time1 and time2
 def findTime(df, time1, time2):
     
     timetable = df[(df['Time'] >= time1) & (df['Time'] <= time2)]
@@ -64,6 +72,8 @@ def findTime(df, time1, time2):
     return timetable
     
 
+
+#calculates the Mem consumption of a Dataframe (node) between start and end (only usable with .mem_pwr)
 def calculateMEMConsumption(node, start, end):
     timetable = findTime(node, start, end)
     power = 0
@@ -87,6 +97,7 @@ def calculateMEMConsumption(node, start, end):
     
     return power / 3600
 
+#calculates the CPU consumption of a Dataframe (node) between start and end (only usable with .mem_pwr)
 def calculateCPUConsumption(node, start, end):
     timetable = findTime(node, start, end)
     power = 0
@@ -109,7 +120,7 @@ def calculateCPUConsumption(node, start, end):
         
     
     return power / 3600
-
+#calculates the consumption of a Dataframe (node) between start and end (only usable with .ttl_pwr)
 def calculatePowerConsumption(node, start, end):
     timetable = findTime(node, start, end)
     power = 0
@@ -133,6 +144,7 @@ def calculatePowerConsumption(node, start, end):
     
     return power / 3600
 
+#calculates the consumption of Multiple nodes passed as a Dataframe in the nodeframe format 
 def calculateTotalPowerConsumption(dataframes, nodeframe):
     totalpower = 0
     n = 0
@@ -147,6 +159,7 @@ def powerToCO2(n):
 def powerToMoney(n):
     return n * 0.2
 
+#Converts and prints power etc for multiple nodes (nodeframe format)
 def totalConsumption(nodeframe):
     
     power = calculateTotalPowerConsumption(dataframes, nodeframe).ttl_pwr / 1000
@@ -156,11 +169,12 @@ def totalConsumption(nodeframe):
     print(str(int(powerToCO2(power))) + ' kG CO² emitted.')
     print(str(int(powerToMoney(power))) + ' € spent.')
 
+#calculates the Interval any dataframe is passable
 def calculateInterval(dataframe):
     return dataframe.Time.iloc[1] - dataframe.Time.iloc[0]
 
-
-def saveToChart(dataframes, nodeframe, power, name, t1, t2):
+#saves to chart
+def saveToChart(dataframes, nodeframe, name, t1, t2):
     with PdfPages('Chart.pdf') as pdf:
 
 
@@ -252,18 +266,18 @@ def saveToChart(dataframes, nodeframe, power, name, t1, t2):
 #main code
 if __name__ == '__main__':
 
-    y = os.system('llq -l -q ' + job)
-    print(y)
 
 
-    
+    #saves start and end to file for interaction with extr_.......
     f = open('interactionfile', 'w')
     f.write(str(start) + '\n' + str(end))
     f.close()
     time.sleep(5)
     os.system('python2 extrct_mntrng_infrmtn.py')
     time.sleep(20)
-    
+
+
+    #loads dataframes
     csv = pd.read_csv('n004', sep='\s*,\s*', header=0, encoding='ascii', engine='python')
     
     
@@ -292,7 +306,7 @@ if __name__ == '__main__':
     nodeframe = pd.DataFrame(csv)
     
     power = calculateTotalPowerConsumption(dataframes, nodeframe).ttl_pwr / 1000
-    saveToChart(dataframes, nodeframe, power, "calc2", 1500441000, 1500528600)
+    saveToChart(dataframes, nodeframe, "calc2", 1500441000, 1500528600)
     totalConsumption(nodeframe)
     
 
