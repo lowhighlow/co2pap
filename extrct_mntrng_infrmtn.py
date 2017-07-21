@@ -6,8 +6,8 @@ import sys,os,commands,glob,getopt,pickle,re
 import string
 import csv
 
-strt="-3600"
-end="-0"
+strt="-186400"
+end="-100"
 
 list=[]
 

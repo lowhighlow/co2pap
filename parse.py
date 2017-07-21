@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import time as time
 from matplotlib.backends.backend_pdf import PdfPages
 import matplotlib.patches as mpatches
-
+import fileinput
 
 #Vals
 interval = 21600
@@ -126,11 +126,13 @@ def saveToChart(dataframes, nodeframe, power, name, t1, t2):
 
         n = 0
         plt.axis([t1,t2, 0, 250])
-        plt.title('Total Consumption')
+        plt.title('CPU Consumption')
         while n < len(nodeframe.node):
             
             plt.plot(dataframes[nodeframe.node.iloc[n]].Time.values, dataframes[nodeframe.node.iloc[n]].cpu_pwr.values)
             n+=1
+        plt.ylabel('Wh')
+        plt.xlabel('Seconds since Epoch')
         pdf.savefig()
         plt.close()
 
@@ -143,7 +145,15 @@ def saveToChart(dataframes, nodeframe, power, name, t1, t2):
 
 #main code
 if __name__ == '__main__':
-    csv = pd.read_csv('n004', sep='\s*,\s*', header=0, encoding='ascii', engine='python')
+    with fileinput.FileInput('n004', inplace=True, backup='.bak') as file:
+        for line in file:
+            print(line.replace(',', '.'), end='')
+
+   
+     
+
+    csv = pd.read_csv('n004', sep='\s*. ', header=0, encoding='ascii', engine='python')
+    
     dataframes = [pd.DataFrame(csv)]
     print('Loading started')
     interval = calculateInterval(dataframes[0])
@@ -152,7 +162,11 @@ if __name__ == '__main__':
     l = 5
     while True:
         try:
+            
+            
+                    
             currentDF = pd.DataFrame(pd.read_csv('n' + toStr(l), sep='\s*,\s*', header=0, encoding='ascii', engine='python'))
+            print(l)
             currentDF = dropNan(currentDF)
             dataframes.append(currentDF)
             
