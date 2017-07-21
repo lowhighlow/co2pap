@@ -11,7 +11,7 @@ import os
 #Vals
 interval = 60
 start = str(-3600*48)
-start = '-100'
+end = '-100'
 
 #functions
 def toStr(n):
