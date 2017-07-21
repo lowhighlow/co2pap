@@ -6,10 +6,12 @@ import matplotlib.pyplot as plt
 import time as time
 from matplotlib.backends.backend_pdf import PdfPages
 import matplotlib.patches as mpatches
-
+import fileinput
 
 #Vals
-interval = 21600
+interval = 60
+
+
 
 #functions
 def toStr(n):
@@ -51,9 +53,9 @@ def findTime(df, time1, time2):
     
     timetable = df[(df['Time'] >= time1) & (df['Time'] <= time2)]
 
-    
-    if timetable.tail(1).Time.iloc[0] < time2:
-        timetable = timetable.append(df[(df['Time'] >= time2) & (df['Time'] <= time2 + interval)])
+    print (df['Time'])
+    #if timetable.tail(1).Time.iloc[0] < time2:
+     #   timetable = timetable.append(df[(df['Time'] >= time2) & (df['Time'] <= time2 + interval)])
     
     if timetable.Time.iloc[0] > time1:
         timetable2 = df[(df['Time'] <= time1) & (df['Time'] >= time1 + interval)]
@@ -111,12 +113,8 @@ def totalConsumption(nodeframe):
 def calculateInterval(dataframe):
     return dataframe.Time.iloc[1] - dataframe.Time.iloc[0]
 
-def calculateInterval(dataframe):
-    return dataframe.Time.iloc[1] - dataframe.Time.iloc[0]
-
 
 def saveToChart(dataframes, nodeframe, power, name, t1, t2):
-
     with PdfPages('Chart.pdf') as pdf:
         n = 0
         plt.axis([t1,t2, 0, 300])
@@ -125,40 +123,96 @@ def saveToChart(dataframes, nodeframe, power, name, t1, t2):
         
             plt.plot(dataframes[nodeframe.node.iloc[n]].Time.values, dataframes[nodeframe.node.iloc[n]].ttl_pwr.values)
             n+=1
+        plt.ylabel('Wh')
+        plt.xlabel('Seconds since Epoch')
+        pdf.savefig()
         pdf.savefig()
         plt.close()
 
         n = 0
         plt.axis([t1,t2, 0, 250])
-        plt.title('Total Consumption')
+        plt.title('CPU Consumption')
         while n < len(nodeframe.node):
             
             plt.plot(dataframes[nodeframe.node.iloc[n]].Time.values, dataframes[nodeframe.node.iloc[n]].cpu_pwr.values)
             n+=1
+        plt.ylabel('Wh')
+        plt.xlabel('Seconds since Epoch')
+        pdf.savefig()
+        plt.close()
+
+        plt.axis([t1,t2, 0, 250])
+        plt.title('Memory Consumption')
+        while n < len(nodeframe.node):
+            
+            plt.plot(dataframes[nodeframe.node.iloc[n]].Time.values, dataframes[nodeframe.node.iloc[n]].mem_pwr.values)
+            n+=1
+        plt.ylabel('Wh')
+        plt.xlabel('Seconds since Epoch')
+        pdf.savefig()
+        plt.close()
+
+        plt.axis([t1,t2, 0, 250])
+        plt.title('CPU Load')
+        while n < len(nodeframe.node):
+            
+            plt.plot(dataframes[nodeframe.node.iloc[n]].Time.values, dataframes[nodeframe.node.iloc[n]].cpu_load.values)
+            n+=1
+        plt.ylabel('Load')
+        plt.xlabel('Seconds since Epoch')
+        pdf.savefig()
+        plt.close()
+
+        plt.axis([t1,t2, 0, 250])
+        plt.title('Memory Load')
+        while n < len(nodeframe.node):
+            
+            plt.plot(dataframes[nodeframe.node.iloc[n]].Time.values, dataframes[nodeframe.node.iloc[n]].mem_load.values)
+            n+=1
+        plt.ylabel('Laoad')
+        plt.xlabel('Seconds since Epoch')
         pdf.savefig()
         plt.close()
 
         
-
+    
+    
+    
+    
+    
 
 #main code
 if __name__ == '__main__':
-    csv = pd.read_csv('/home/gustav/PowerConsumptionData/n004', sep='\s*,\s*', header=0, encoding='ascii', engine='python')
+    
+
+   
+     
+
+    csv = pd.read_csv('n004', sep='\s*,\s*', header=0, encoding='ascii', engine='python')
+    
+    
     dataframes = [pd.DataFrame(csv)]
+    print(dataframes[0])
     print('Loading started')
     interval = calculateInterval(dataframes[0])
     print(interval)
+    
     dataframes[0] = dropNan(dataframes[0])
     l = 5
     while True:
         try:
-            currentDF = pd.DataFrame(pd.read_csv('/home/gustav/PowerConsumptionData/n' + toStr(l), sep='\s*,\s*', header=0, encoding='ascii', engine='python'))
+                    
+            currentDF = pd.DataFrame(pd.read_csv('n' + toStr(l), sep='\s*,\s*', header=0, encoding='ascii', engine='python'))
+            
+            
             currentDF = dropNan(currentDF)
             dataframes.append(currentDF)
-            
+            print(l)
             l += 1
         except FileNotFoundError:
-            break
+            if l > 128:
+                break
+            l += 1
     print('Loading finished')
 
     #Testing Area
