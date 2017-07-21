@@ -6,7 +6,7 @@ import matplotlib.pyplot as plt
 import time as time
 from matplotlib.backends.backend_pdf import PdfPages
 import matplotlib.patches as mpatches
-<<<<<<< HEAD
+
 import fileinput
 
 #Vals
@@ -35,7 +35,7 @@ def dropNan(raw):
     k = 0
     
     if len(occurences) != 0:
-        while k < len(occurences):
+        while k < len(occurences) - 1:
             
             bitmask[occurences[k] + 1] = True
             
@@ -118,10 +118,10 @@ def saveToChart(dataframes, nodeframe, power, name, t1, t2):
     with PdfPages('Chart.pdf') as pdf:
 
 
-        n = 1
-        colors = [(0, 0, 255)]
-        while n < len(nodeframe.node):
-            colors[n] = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
+        #n = 1
+        #colors = [(0, 0, 255)]
+        #while n < len(nodeframe.node):
+            #colors[n] = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
         
         n = 0
         plt.axis([t1,t2, 0, 300])
@@ -148,7 +148,7 @@ def saveToChart(dataframes, nodeframe, power, name, t1, t2):
         pdf.savefig()
         plt.close()
 
-        plt.axis([t1,t2, 0, 250])
+        plt.axis([t1,t2, 0, 100])
         plt.title('Memory Consumption')
         while n < len(nodeframe.node):
             
@@ -159,7 +159,7 @@ def saveToChart(dataframes, nodeframe, power, name, t1, t2):
         pdf.savefig()
         plt.close()
 
-        plt.axis([t1,t2, 0, 250])
+        plt.axis([t1,t2, 0, 16])
         plt.title('CPU Load')
         while n < len(nodeframe.node):
             
@@ -170,7 +170,7 @@ def saveToChart(dataframes, nodeframe, power, name, t1, t2):
         pdf.savefig()
         plt.close()
 
-        plt.axis([t1,t2, 0, 250])
+        plt.axis([t1,t2, 0, 10])
         plt.title('Memory Load')
         while n < len(nodeframe.node):
             
@@ -191,10 +191,9 @@ if __name__ == '__main__':
     
     
     dataframes = [pd.DataFrame(csv)]
-    print(dataframes[0])
     print('Loading started')
-    #interval = calculateInterval(dataframes[0])
-    print(interval)
+    interval = calculateInterval(dataframes[0])
+    
     
     dataframes[0] = dropNan(dataframes[0])
     l = 5
@@ -204,7 +203,6 @@ if __name__ == '__main__':
             currentDF = pd.DataFrame(pd.read_csv('n' + toStr(l), sep='\s*,\s*', header=0, encoding='ascii', engine='python'))
             currentDF = dropNan(currentDF)
             dataframes.append(currentDF)
-            print(l)
             l += 1
         except FileNotFoundError:
             if l > 128:
@@ -217,7 +215,7 @@ if __name__ == '__main__':
     nodeframe = pd.DataFrame(csv)
     
     power = calculateTotalPowerConsumption(dataframes, nodeframe).ttl_pwr / 1000
-    saveToChart(dataframes, nodeframe, power, "calc2", 1483228800, 1498867200)
+    saveToChart(dataframes, nodeframe, power, "calc2", 1500441000, 1500528600)
     totalConsumption(nodeframe)
     
 
