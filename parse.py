@@ -12,6 +12,7 @@ import os
 interval = 60
 start = str(-3600*48)
 end = '-100'
+job='mgmt.8719963.0'
 
 #functions
 def toStr(n):
@@ -250,6 +251,12 @@ def saveToChart(dataframes, nodeframe, power, name, t1, t2):
 
 #main code
 if __name__ == '__main__':
+
+    y = os.system('llq -l -q ' + job)
+    print(y)
+
+
+    
     f = open('interactionfile', 'w')
     f.write(str(start) + '\n' + str(end))
     f.close()
