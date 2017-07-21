@@ -10,8 +10,9 @@ from parse import end
 
 f=open('interactionfile', 'r')
 
-strt=start
-end=end
+strt=f.readline().replace('\n', '')
+end=f.readline()
+f.close()
 
 list=[]
 

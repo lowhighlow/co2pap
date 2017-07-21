@@ -250,6 +250,8 @@ def saveToChart(dataframes, nodeframe, power, name, t1, t2):
 
 #main code
 if __name__ == '__main__':
+    f = open('interactionfile', 'w')
+    f.write(str(start) + '\n' + str(end))
     os.system('python extrct_mntrng_infrmtn.py')
     time.sleep(60)
     
