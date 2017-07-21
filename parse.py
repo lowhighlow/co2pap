@@ -143,7 +143,7 @@ def saveToChart(dataframes, nodeframe, power, name, t1, t2):
 
 #main code
 if __name__ == '__main__':
-    csv = pd.read_csv('/home/gustav/PowerConsumptionData/n004', sep='\s*,\s*', header=0, encoding='ascii', engine='python')
+    csv = pd.read_csv('n004', sep='\s*,\s*', header=0, encoding='ascii', engine='python')
     dataframes = [pd.DataFrame(csv)]
     print('Loading started')
     interval = calculateInterval(dataframes[0])
@@ -152,7 +152,7 @@ if __name__ == '__main__':
     l = 5
     while True:
         try:
-            currentDF = pd.DataFrame(pd.read_csv('/home/gustav/PowerConsumptionData/n' + toStr(l), sep='\s*,\s*', header=0, encoding='ascii', engine='python'))
+            currentDF = pd.DataFrame(pd.read_csv('n' + toStr(l), sep='\s*,\s*', header=0, encoding='ascii', engine='python'))
             currentDF = dropNan(currentDF)
             dataframes.append(currentDF)
             
