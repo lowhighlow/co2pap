@@ -6,8 +6,7 @@ import matplotlib.pyplot as plt
 import time as time
 from matplotlib.backends.backend_pdf import PdfPages
 import matplotlib.patches as mpatches
-
-import fileinput
+import random
 
 #Vals
 interval = 60
@@ -53,7 +52,6 @@ def findTime(df, time1, time2):
     
     timetable = df[(df['Time'] >= time1) & (df['Time'] <= time2)]
 
-    print (df['Time'])
     if timetable.tail(1).Time.iloc[0] < time2:
         timetable = timetable.append(df[(df['Time'] >= time2) & (df['Time'] <= time2 + interval)])
     
@@ -63,6 +61,52 @@ def findTime(df, time1, time2):
         
     return timetable
     
+
+def calculateMEMConsumption(node, start, end):
+    timetable = findTime(node, start, end)
+    power = 0
+   
+    if timetable.Time.iloc[0] > start:
+        
+        power += (timetable.Time.iloc[0] - start) * timetable.mem_pwr.iloc[0]
+    else:
+        power += interval * timetable.mem_pwr.iloc[0]
+
+    n = 1
+    while n < timetable.Time.size -1:
+        power += interval * timetable.mem_pwr.iloc[n]
+        n += 1
+    
+    if timetable.tail(1).Time.iloc[0] > end:
+        power += (timetable.tail(1).Time.iloc[0] - end) * timetable.tail(1).iloc[0]
+    else:
+        power += interval * timetable.tail(1).iloc[0]
+        
+    
+    return power / 3600
+
+def calculateCPUConsumption(node, start, end):
+    timetable = findTime(node, start, end)
+    power = 0
+   
+    if timetable.Time.iloc[0] > start:
+        
+        power += (timetable.Time.iloc[0] - start) * timetable.cpu_pwr.iloc[0]
+    else:
+        power += interval * timetable.cpu_pwr.iloc[0]
+
+    n = 1
+    while n < timetable.Time.size -1:
+        power += interval * timetable.cpu_pwr.iloc[n]
+        n += 1
+    
+    if timetable.tail(1).Time.iloc[0] > end:
+        power += (timetable.tail(1).Time.iloc[0] - end) * timetable.tail(1).iloc[0]
+    else:
+        power += interval * timetable.tail(1).iloc[0]
+        
+    
+    return power / 3600
 
 def calculatePowerConsumption(node, start, end):
     timetable = findTime(node, start, end)
@@ -118,20 +162,19 @@ def saveToChart(dataframes, nodeframe, power, name, t1, t2):
     with PdfPages('Chart.pdf') as pdf:
 
 
-        #n = 1
-        #colors = [(0, 0, 255)]
-        #while n < len(nodeframe.node):
-            #colors[n] = (random.randint(0, 255), random.randint(0, 255), random.randint(0, 255))
+        
         
         n = 0
         plt.axis([t1,t2, 0, 300])
         plt.title('Total Consumption')
         while n < len(nodeframe.node):
-        
-            plt.plot(dataframes[nodeframe.node.iloc[n]].Time.values, dataframes[nodeframe.node.iloc[n]].ttl_pwr.values)
+            
+            plt.plot(dataframes[nodeframe.node.iloc[n]].Time.values, dataframes[nodeframe.node.iloc[n]].ttl_pwr.values, label='n' + toStr(n))
             n+=1
         plt.ylabel('Wh')
         plt.xlabel('Seconds since Epoch')
+        plt.legend(loc='best')
+
         pdf.savefig()
         pdf.savefig()
         plt.close()
@@ -141,48 +184,67 @@ def saveToChart(dataframes, nodeframe, power, name, t1, t2):
         plt.title('CPU Consumption')
         while n < len(nodeframe.node):
             
-            plt.plot(dataframes[nodeframe.node.iloc[n]].Time.values, dataframes[nodeframe.node.iloc[n]].cpu_pwr.values)
+            plt.plot(dataframes[nodeframe.node.iloc[n]].Time.values, dataframes[nodeframe.node.iloc[n]].cpu_pwr.values, label='n' + toStr(n))
             n+=1
         plt.ylabel('Wh')
         plt.xlabel('Seconds since Epoch')
+        plt.legend(loc='best')
         pdf.savefig()
         plt.close()
 
+        n = 0
         plt.axis([t1,t2, 0, 100])
         plt.title('Memory Consumption')
+        plt.subplots()
         while n < len(nodeframe.node):
             
-            plt.plot(dataframes[nodeframe.node.iloc[n]].Time.values, dataframes[nodeframe.node.iloc[n]].mem_pwr.values)
+            plt.plot(dataframes[nodeframe.node.iloc[n]].Time.values, dataframes[nodeframe.node.iloc[n]].mem_pwr.values, label='n' + toStr(n))
             n+=1
         plt.ylabel('Wh')
         plt.xlabel('Seconds since Epoch')
+        plt.legend(loc='best')
         pdf.savefig()
         plt.close()
 
-        plt.axis([t1,t2, 0, 16])
+        n = 0
+        plt.axis([t1,t2, 0, 40])
         plt.title('CPU Load')
         while n < len(nodeframe.node):
             
-            plt.plot(dataframes[nodeframe.node.iloc[n]].Time.values, dataframes[nodeframe.node.iloc[n]].cpu_load.values)
+            plt.plot(dataframes[nodeframe.node.iloc[n]].Time.values, dataframes[nodeframe.node.iloc[n]].cpu_load.values, label='n' + toStr(n))
             n+=1
         plt.ylabel('Load')
         plt.xlabel('Seconds since Epoch')
+        plt.legend(loc='best')
         pdf.savefig()
         plt.close()
-
-        plt.axis([t1,t2, 0, 10])
+        
+        n = 0
+        plt.axis([t1,t2, 0, 40000])
         plt.title('Memory Load')
         while n < len(nodeframe.node):
             
-            plt.plot(dataframes[nodeframe.node.iloc[n]].Time.values, dataframes[nodeframe.node.iloc[n]].mem_load.values)
+            plt.plot(dataframes[nodeframe.node.iloc[n]].Time.values, dataframes[nodeframe.node.iloc[n]].mem_load.values, label='n' + toStr(n))
             n+=1
         plt.ylabel('Laoad')
         plt.xlabel('Seconds since Epoch')
+        plt.legend(loc='best')
         pdf.savefig()
         plt.close()
             
 
-    
+
+        #piechart
+        labels = ['Cpu consumption', 'Memory\nconsumption', 'Other factors']
+        node = get(dataframes, nodeframe.node.iloc[0])
+        div = calculatePowerConsumption(node, t1, t2).ttl_pwr - calculateCPUConsumption(node, t1, t2).cpu_pwr - calculateMEMConsumption(node, t1, t2).mem_pwr 
+        sizes = [calculateCPUConsumption(node, t1, t2).cpu_pwr / calculatePowerConsumption(node, t1, t2).ttl_pwr, calculateMEMConsumption(node, t1, t2).mem_pwr / calculatePowerConsumption(node, t1, t2).ttl_pwr, div / calculatePowerConsumption(node, t1, t2).ttl_pwr]
+        plt.pie(sizes, labels=labels, shadow=True, startangle=90)
+        plt.title('Percentual Consumtion for n' + toStr(nodeframe.node.iloc[0]))
+        pdf.savefig()
+        plt.close()
+
+        
     
 
 #main code
