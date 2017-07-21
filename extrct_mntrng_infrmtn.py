@@ -5,9 +5,10 @@ from subprocess import Popen,PIPE,call
 import sys,os,commands,glob,getopt,pickle,re
 import string
 import csv
-
-strt="-186400"
-end="-100"
+from parse import start
+from parse import end
+strt=start
+end=end
 
 list=[]
 

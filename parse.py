@@ -6,11 +6,12 @@ import matplotlib.pyplot as plt
 import time as time
 from matplotlib.backends.backend_pdf import PdfPages
 import matplotlib.patches as mpatches
-import random
+import os
 
 #Vals
 interval = 60
-
+global start = str(-3600*48)
+global start = '-100'
 
 #functions
 def toStr(n):
@@ -249,6 +250,9 @@ def saveToChart(dataframes, nodeframe, power, name, t1, t2):
 
 #main code
 if __name__ == '__main__':
+    os.system('python extrct_mntrng_infrmtn.py')
+    time.sleep(60)
+    
     csv = pd.read_csv('n004', sep='\s*,\s*', header=0, encoding='ascii', engine='python')
     
     
