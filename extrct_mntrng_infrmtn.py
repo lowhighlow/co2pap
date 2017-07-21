@@ -2,7 +2,7 @@
 from datetime import datetime
 import time
 from subprocess import Popen,PIPE,call
-import sys,os,commands,glob,getopt,pickle,re
+import sys,os,glob,getopt,pickle,re
 import string
 import csv
 from parse import start
